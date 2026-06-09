@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campaign Analyzer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- Connect Screen -->
+    <div id="connect-screen" class="screen">
+      <div class="connect-card">
+        <div class="connect-header">
+          <h1>Campaign Analyzer</h1>
+          <p class="subtitle">Paste your Instantly.ai API key to analyze your campaigns</p>
+        </div>
+        <div class="connect-form">
+          <div class="input-group">
+            <label for="api-key">API Key</label>
+            <div class="input-wrapper">
+              <input type="password" id="api-key" placeholder="Enter your Instantly API key..." autocomplete="off">
+              <button class="toggle-visibility" onclick="toggleKeyVisibility()" title="Show/hide key">
+                <span id="eye-icon">Show</span>
+              </button>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-full" id="connect-btn" onclick="connect()">Connect</button>
+          <p class="security-note">Your key is only used for this session and is never stored.</p>
+        </div>
+        <div id="connect-error" class="error-message hidden"></div>
+      </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen hidden">
+      <div class="loading-card">
+        <div class="spinner"></div>
+        <p id="loading-text">Connecting to Instantly...</p>
+      </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen" class="screen hidden">
+      <header class="top-bar">
+        <h1>Campaign Analyzer</h1>
+        <button class="btn btn-outline" onclick="disconnect()">Disconnect</button>
+      </header>
+
+      <div class="dashboard-content">
+        <!-- Summary Stats -->
+        <div id="summary-stats" class="stats-bar"></div>
+
+        <!-- Campaign List -->
+        <div class="section-header">
+          <h2>Your Campaigns</h2>
+          <span id="campaign-count" class="badge badge-neutral"></span>
+        </div>
+        <div id="campaign-list" class="campaign-grid"></div>
+      </div>
+    </div>
+
+    <!-- Campaign Detail Screen -->
+    <div id="detail-screen" class="screen hidden">
+      <header class="top-bar">
+        <button class="btn btn-ghost" onclick="goBack()">Back to Dashboard</button>
+        <button class="btn btn-outline" onclick="disconnect()">Disconnect</button>
+      </header>
+
+      <div class="detail-content">
+        <div id="detail-header"></div>
+        <div id="detail-analysis"></div>
+        <div id="detail-steps"></div>
+      </div>
+    </div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
