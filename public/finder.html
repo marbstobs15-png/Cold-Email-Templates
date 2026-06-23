@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Website Finder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="screen">
+      <div class="connect-card" style="max-width: 640px;">
+        <div class="connect-header">
+          <h1>Website Finder</h1>
+          <p class="subtitle">Enter a company name and location to find their website</p>
+        </div>
+
+        <div class="connect-form">
+          <div class="input-group">
+            <label for="company">Company name</label>
+            <input type="text" id="company" placeholder="e.g. Acme Fireplace Co" autocomplete="off">
+          </div>
+          <div class="input-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" placeholder="e.g. Denver, CO" autocomplete="off">
+          </div>
+          <button class="btn btn-primary btn-full" id="find-btn" onclick="findWebsite()">Find Website</button>
+        </div>
+
+        <div id="finder-error" class="error-message hidden"></div>
+        <div id="finder-results" class="hidden" style="margin-top: 24px;"></div>
+      </div>
+    </div>
+  </div>
+  <script src="finder.js"></script>
+</body>
+</html>
