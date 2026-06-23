@@ -792,3 +792,56 @@ body {
   .step-analytics { grid-template-columns: repeat(2, 1fr); }
   .connect-card { padding: 24px; }
 }
+
+/* ---- Website finder: tabs, bulk textarea & results table ---- */
+.finder-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.finder-tab {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid var(--border, #d0d5dd);
+  background: transparent;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: inherit;
+}
+.finder-tab.active {
+  background: var(--primary, #2563eb);
+  border-color: var(--primary, #2563eb);
+  color: #fff;
+}
+#bulk-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border, #d0d5dd);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+.bulk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.bulk-table th,
+.bulk-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border, #e4e7ec);
+  vertical-align: top;
+}
+.bulk-table th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.bulk-none {
+  color: #98a2b3;
+  font-style: italic;
+}

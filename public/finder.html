@@ -9,26 +9,57 @@
 <body>
   <div id="app">
     <div class="screen">
-      <div class="connect-card" style="max-width: 640px;">
+      <div class="connect-card" style="max-width: 820px;">
         <div class="connect-header">
           <h1>Website Finder</h1>
-          <p class="subtitle">Enter a company name and location to find their website</p>
+          <p class="subtitle">Find company websites one at a time, or in bulk</p>
         </div>
 
-        <div class="connect-form">
-          <div class="input-group">
-            <label for="company">Company name</label>
-            <input type="text" id="company" placeholder="e.g. Acme Fireplace Co" autocomplete="off">
-          </div>
-          <div class="input-group">
-            <label for="location">Location</label>
-            <input type="text" id="location" placeholder="e.g. Denver, CO" autocomplete="off">
-          </div>
-          <button class="btn btn-primary btn-full" id="find-btn" onclick="findWebsite()">Find Website</button>
+        <!-- Mode tabs -->
+        <div class="finder-tabs">
+          <button id="tab-single" class="finder-tab active" onclick="switchMode('single')">Single</button>
+          <button id="tab-bulk" class="finder-tab" onclick="switchMode('bulk')">Bulk</button>
         </div>
 
-        <div id="finder-error" class="error-message hidden"></div>
-        <div id="finder-results" class="hidden" style="margin-top: 24px;"></div>
+        <!-- Single mode -->
+        <div id="mode-single">
+          <div class="connect-form">
+            <div class="input-group">
+              <label for="company">Company name</label>
+              <input type="text" id="company" placeholder="e.g. Acme Fireplace Co" autocomplete="off">
+            </div>
+            <div class="input-group">
+              <label for="location">Location</label>
+              <input type="text" id="location" placeholder="e.g. Denver, CO" autocomplete="off">
+            </div>
+            <button class="btn btn-primary btn-full" id="find-btn" onclick="findWebsite()">Find Website</button>
+          </div>
+          <div id="finder-error" class="error-message hidden"></div>
+          <div id="finder-results" class="hidden" style="margin-top: 24px;"></div>
+        </div>
+
+        <!-- Bulk mode -->
+        <div id="mode-bulk" class="hidden">
+          <div class="connect-form">
+            <div class="input-group">
+              <label for="bulk-input">Companies (one per line, as <code>Company, Location</code>)</label>
+              <textarea id="bulk-input" rows="8" placeholder="Acme Fireplace Co, Denver, CO&#10;Smith Plumbing, Austin, TX&#10;Riverside Roofing, Portland, OR"></textarea>
+              <p class="security-note" style="margin-top: 6px;">
+                Put the company first, then its location. The location is everything after the first comma.
+                You can also upload a CSV with <code>company</code> and <code>location</code> columns.
+              </p>
+            </div>
+            <div class="input-group">
+              <label for="csv-file">Or upload a CSV file</label>
+              <input type="file" id="csv-file" accept=".csv,text/csv" onchange="loadCsv(event)">
+            </div>
+            <button class="btn btn-primary btn-full" id="bulk-btn" onclick="findBulk()">Find Websites</button>
+          </div>
+          <div id="bulk-error" class="error-message hidden"></div>
+          <div id="bulk-progress" class="hidden" style="margin-top: 16px;"></div>
+          <div id="bulk-results" class="hidden" style="margin-top: 24px;"></div>
+        </div>
+
       </div>
     </div>
   </div>

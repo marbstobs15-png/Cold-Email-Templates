@@ -111,13 +111,10 @@ function scoreCandidate(hostname, companyName) {
   return score;
 }
 
-app.post('/api/find-website', async (req, res) => {
-  const { company, location } = req.body || {};
-
-  if (!company || !company.trim()) {
-    return res.status(400).json({ error: 'Missing company name' });
-  }
-
+// Search for a single company's website. Returns
+// { query, website, candidates } and never throws — search/network errors
+// surface as an `error` field so bulk runs can keep going.
+async function findWebsiteFor(company, location) {
   const query = [company, location].filter(Boolean).join(' ').trim();
 
   try {
@@ -158,18 +155,65 @@ app.post('/api/find-website', async (req, res) => {
 
     candidates.sort((a, b) => b.score - a.score);
 
-    if (candidates.length === 0) {
-      return res.json({ query, website: null, candidates: [] });
+    return {
+      query,
+      website: candidates.length ? candidates[0].url : null,
+      candidates: candidates.slice(0, 5)
+    };
+  } catch (error) {
+    return { query, website: null, candidates: [], error: error.message };
+  }
+}
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+app.post('/api/find-website', async (req, res) => {
+  const { company, location } = req.body || {};
+
+  if (!company || !company.trim()) {
+    return res.status(400).json({ error: 'Missing company name' });
+  }
+
+  const result = await findWebsiteFor(company, location);
+  if (result.error) {
+    return res.status(500).json({ error: result.error });
+  }
+  res.json(result);
+});
+
+app.post('/api/find-websites-bulk', async (req, res) => {
+  const { rows } = req.body || {};
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return res.status(400).json({ error: 'Provide a non-empty "rows" array' });
+  }
+  if (rows.length > 200) {
+    return res.status(400).json({ error: 'Limit is 200 companies per run' });
+  }
+
+  const results = [];
+  for (const row of rows) {
+    const company = (row && row.company ? String(row.company) : '').trim();
+    const location = (row && row.location ? String(row.location) : '').trim();
+
+    if (!company) {
+      results.push({ company, location, website: null, error: 'Missing company name' });
+      continue;
     }
 
-    res.json({
-      query,
-      website: candidates[0].url,
-      candidates: candidates.slice(0, 5)
+    const r = await findWebsiteFor(company, location);
+    results.push({
+      company,
+      location,
+      website: r.website,
+      error: r.error || null
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+
+    // Be polite to the search endpoint between requests.
+    await sleep(700);
   }
+
+  res.json({ count: results.length, results });
 });
 
 app.listen(PORT, () => {
